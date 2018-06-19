@@ -18,5 +18,5 @@ $ pip install -r requirements.txt
 Obs: se tiver tanto pip para python2 quanto para python3 instalado deverá utilizar `pip3 install -r requirements.txt`.
 
 ### Windows
-
+teste
 Recomenda-se usar o [Anaconda Navigator](https://anaconda.org/anaconda/anaconda-navigator).
