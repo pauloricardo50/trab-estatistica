@@ -1,12 +1,20 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+#  Probabilidade.py
+#  
 
-// amigos seguem as funcoes que fiz aqui. 
 
-def CalculaMedia(listaDados):
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+def CalculaMedia(lstdados):
 	somatorio = 0
 	media = 0 
-	tam = len(listaDados) #quantidade total da amostra
+	tam = len(lstdados) #quantidade total da amostra
 	
-	for valor in listaDados:
+	for valor in lstdados:
 		somatorio = somatorio + valor;
 	#fim  for
 	media = somatorio/tam
@@ -14,24 +22,24 @@ def CalculaMedia(listaDados):
 	return media
 #fim função media
 
-def EhPar(listaDados):
-	if len(listaDados)%2 == 0:
+def VerPar(lstdados):
+	if len(lstdados)%2 == 0:
 		return True
 	#fim if
 	
 	return False
 #fim função
 	
-def CalculaMediana(listaDados):	
+def CalculaMediana(lstdados):	
 	#Verifica se o tamanho da lista é par
-	if EhPar:
-		pos1 = listaDados[int((len(listaDados)/2)-1)]
-		pos2 = listaDados[int((len(listaDados)/2))]
+	if VerPar:
+		pos1 = lstdados[int((len(lstdados)/2)-1)]
+		pos2 = lstdados[int((len(lstdados)/2))]
 		media = CalculaMedia([pos1,pos2])
 		return media
 	#Se for impar
 	else:
-		pos = listaDados[int(len(listaDados)/2)]
+		pos = lstdados[int(len(lstdados)/2)]
 		return pos
 #fim função mediana
 
@@ -50,10 +58,10 @@ def CaculaOcorrencias(listaChaves,dicDados):
 #fim função
 	
 	
-def CalculaModa(listaDados):
+def CalculaModa(lstdados):
 	dicDados = {} 	#dicionario de ocorrencias
 	
-	for valor in listaDados:
+	for valor in lstdados:
 		if valor in dicDados.keys():
 			dicDados[valor] = dicDados[valor]+1
 		else:
@@ -66,16 +74,130 @@ def CalculaModa(listaDados):
 	return moda
 #fim função moda
 
-def CalculaVariancia(listaDados):
-	media = CalculaMedia(listaDados)
+def CalculaVariancia(lstdados):
+	media = CalculaMedia(lstdados)
 	somatorio = 0
-	tam = len(listaDados)
+	tam = len(lstdados)
 	variancia = 0
 
-	for valor in listaDados:
+	for valor in lstdados:
 		somatorio = somatorio + ((valor - media) ** 2)
 	#fim for 
 	variancia = somatorio/tam-1
 	
 	return variancia
 #fim função variancia
+
+def VerificaDesvioPadrao(lstdados):
+	variancia = CalculaVariancia(lstdados)
+	variancia = variancia ** (1/2)
+	
+	return variancia
+##fim função Desvio padrão
+
+def PrimeiroQuartil(lstdados):
+	pos = round((len(lstdados)+1)*0.25)
+	return lstdados[pos]
+#fim função 
+
+def TerceiroQuartil(lstdados):
+	pos = round((len(lstdados)+1)*0.75)
+	return lstdados[pos]
+#fim função 
+
+def AmplitudeInterquartil(lstdados):
+	primquartil = PrimeiroQuartil(lstdados)
+	terquartil = TerceiroQuartil(lstdados)
+	return terquartil - primquartil
+#fim função 
+
+def ImprimeBoxplot(lstdados):
+	#Cria o boxplot
+	plt.boxplot(lstdados)
+	#Adiciona titulo
+	plt.title("Taxa de Atividade Por Grupos de Idade / Mensal")
+	#Mostra na tela
+	plt.show()
+#fim função 
+
+def ImprimeHistograma(lstdados):
+	listaAux = [] #lista sem repetição
+	for num in lstdados:
+		if num not in listaAux:
+			listaAux.append(num)
+	#fim for
+	#print("\n\n")
+	listaAux = sorted(listaAux)
+	#print(listaAux)
+	#criando o histograma
+	x = listaAux
+	y = lstdados
+	plt.hist(lstdados,listaAux,histtype="bar",rwidth=0.8)
+	
+	#criando o titulo e as legendas dos eixos
+	plt.xlabel("Grupos de Idade")
+	plt.ylabel("Taxa de Atividade")
+	plt.title("Taxa de Atividade Por Grupos de Idade")
+	#Mostra o histograma na tela
+	plt.show()
+#fim função
+
+def lerArquivo():
+	mat_Dados = []
+	arquivo = open("series_historicas.csv", "rt")
+	linha = arquivo.readline();
+	
+	while linha != "":
+		linha = linha.strip("\n")
+		linha = linha.split(",")	
+		mat_Dados.append(linha)
+		linha = arquivo.readline()
+	#fim while
+	
+	arquivo.close()
+	
+	return mat_Dados
+#fim funçao
+
+def trataDados(matDados):
+	lstdados = []
+	for linha in range(len(matDados)):
+		for coluna in range(len(matDados[linha])):
+			if (len(matDados[linha][coluna])) == 2:
+				valor = int(matDados[linha][coluna])
+				lstdados.append(valor)
+			#fim for
+		#fim for
+	#fim for
+	return lstdados
+#fim função
+
+def main():
+	lstdados = []
+	
+	#Obtendo os dados já ordenados
+	matDados = sorted(lerArquivo())
+	lstdados = trataDados(matDados)
+	#print(lstdados)
+	#print("\n\n")
+	
+	#Imprime todos as analises dos dados
+	print('Media: %.6f '% CalculaMedia(lstdados))
+	print('Moda: %d '% CalculaModa(lstdados))
+	print('Mediana: %.2f '% CalculaMediana(lstdados))
+	
+	print("Variancia: %.6f" % CalculaVariancia(lstdados))
+	print("Desvio Padrao: %.6f " % VerificaDesvioPadrao(lstdados))
+	print("Primeiro Quartil: %d" % PrimeiroQuartil(lstdados))
+	print("Terceiro Quartil: %d" % TerceiroQuartil(lstdados))
+	print("Amplitude Interquartil: %d" % AmplitudeInterquartil(lstdados))
+
+	#Histograma
+	ImprimeHistograma(lstdados)
+
+	#BoxPLot
+	ImprimeBoxplot(lstdados)
+	
+	return 0
+if __name__ == '__main__':
+	main()
