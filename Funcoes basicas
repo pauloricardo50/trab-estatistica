@@ -1,0 +1,81 @@
+
+// amigos seguem as funcoes que fiz aqui. 
+
+def CalculaMedia(listaDados):
+	somatorio = 0
+	media = 0 
+	tam = len(listaDados) #quantidade total da amostra
+	
+	for valor in listaDados:
+		somatorio = somatorio + valor;
+	#fim  for
+	media = somatorio/tam
+	
+	return media
+#fim função media
+
+def EhPar(listaDados):
+	if len(listaDados)%2 == 0:
+		return True
+	#fim if
+	
+	return False
+#fim função
+	
+def CalculaMediana(listaDados):	
+	#Verifica se o tamanho da lista é par
+	if EhPar:
+		pos1 = listaDados[int((len(listaDados)/2)-1)]
+		pos2 = listaDados[int((len(listaDados)/2))]
+		media = CalculaMedia([pos1,pos2])
+		return media
+	#Se for impar
+	else:
+		pos = listaDados[int(len(listaDados)/2)]
+		return pos
+#fim função mediana
+
+def CaculaOcorrencias(listaChaves,dicDados):
+	maior = 0
+	moda = 0
+	
+	for chave in listaChaves:
+		if dicDados[chave] > maior:
+			moda = chave
+			maior = dicDados[chave]
+		#fim if 
+	#fim for
+	
+	return moda
+#fim função
+	
+	
+def CalculaModa(listaDados):
+	dicDados = {} 	#dicionario de ocorrencias
+	
+	for valor in listaDados:
+		if valor in dicDados.keys():
+			dicDados[valor] = dicDados[valor]+1
+		else:
+			dicDados[valor] = 1
+	#fim for
+
+	listaChaves = dicDados.keys()
+	moda = CaculaOcorrencias(listaChaves,dicDados)
+	
+	return moda
+#fim função moda
+
+def CalculaVariancia(listaDados):
+	media = CalculaMedia(listaDados)
+	somatorio = 0
+	tam = len(listaDados)
+	variancia = 0
+
+	for valor in listaDados:
+		somatorio = somatorio + ((valor - media) ** 2)
+	#fim for 
+	variancia = somatorio/tam-1
+	
+	return variancia
+#fim função variancia
