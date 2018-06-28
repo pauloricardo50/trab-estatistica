@@ -1,7 +1,7 @@
 # Trabalho de Probabilidade e Estatística 2018/1
 
 RESUMO DO TRABALHO
-
+Relatorio do trab: https://1drv.ms/w/s!AjJHMkpgV3NGiu0VsGPr3z5h2LaZtQ
 ## Tecnologias
 
 * [Python 3.6.x](https://www.python.org/)
